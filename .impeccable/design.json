@@ -1,0 +1,12 @@
+{
+  "world": "konbini-receipt",
+  "surface": "site/index.html",
+  "colors": {
+    "light": { "counter": "#e6e4dd", "counterInk": "#3b3c3f", "counterInk2": "#6a6b6f", "paper": "#fbfaf6", "paperEdge": "#efede6", "ink": "#232427", "ink2": "#5f6064", "rule": "#a9aaad", "red": "#c8322a", "redPress": "#a82720", "onRed": "#fffaf4", "slot": "#2b2c2f" },
+    "dark": { "counter": "#141516", "counterInk": "#d9d8d3", "counterInk2": "#9c9b97", "paper": "#ecebe3", "paperEdge": "#dedcd2", "ink": "#1f2023", "ink2": "#55565a", "rule": "#9c9d9f", "red": "#c8322a", "redPress": "#a82720", "onRed": "#fffaf4", "slot": "#050505" }
+  },
+  "fonts": { "display": "DotGothic16", "body": "BIZ UDGothic" },
+  "type": { "h1": "clamp(29px, 7.2vw, 40px)", "total": "clamp(54px, 15vw, 80px)", "body": "16px/1.75" },
+  "layout": { "receiptMaxWidth": "520px", "pad": "clamp(20px, 5vw, 36px)", "rule": "2px dashed" },
+  "motion": { "feed": "900ms cubic-bezier(.16,1,.3,1)", "printStagger": "70ms" }
+}
