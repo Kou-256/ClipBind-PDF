@@ -58,3 +58,7 @@ powershell -ExecutionPolicy Bypass -File build.ps1   # -> dist\ClipBindPDF-Setup
 ```
 
 For a quick run without the installer: `dotnet run -c Release`.
+
+## License / ライセンス
+
+[MIT](LICENSE)

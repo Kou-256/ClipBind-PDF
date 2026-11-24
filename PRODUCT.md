@@ -35,7 +35,7 @@ Windows 10 (1809+) / 11, 64-bit. Typical flow: Win+Shift+S or "copy image" repea
 - Japanese / English UI; light / dark; high-DPI and mixed-DPI aware.
 - Runs entirely on the PC; images are not uploaded anywhere (the app has no network code).
 - Free download from GitHub Releases. Installer is not code-signed, so SmartScreen may warn.
-- License: undecided — do not state one.
+- License: MIT (see LICENSE).
 
 ## Brand Commitments
 
