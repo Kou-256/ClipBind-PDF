@@ -10,7 +10,7 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <AssemblyName>ClipBind PDF</AssemblyName>
     <Product>ClipBind PDF</Product>
-    <Version>1.2.0</Version>
+    <Version>1.2.1</Version>
     <Copyright>Copyright (c) 2026 Kou Hashizume</Copyright>
     <Description>Combine clipboard images into one PDF</Description>
     <ApplicationIcon>ClipBind.ico</ApplicationIcon>
