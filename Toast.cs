@@ -136,7 +136,7 @@ sealed class ToastForm : Form
             ToastKind.Error => Theme.Error,
             _ => Theme.Info,
         };
-        lifetimeMs = kind == ToastKind.Error ? 7000 : actions.Length > 0 ? 6500 : 3500;
+        lifetimeMs = kind == ToastKind.Error ? 7000 : kind == ToastKind.Info && actions.Length > 1 ? 15000 : actions.Length > 0 ? 6500 : 3500;
 
         var row = Theme.Style(new TableLayoutPanel
         {

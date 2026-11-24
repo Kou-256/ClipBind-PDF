@@ -26,6 +26,7 @@ No .NET installation needed. Windows 10 (1809) or later, 64-bit.
 - **Import clipboard history** — load all images in your Win+V history at once, in the order you copied them.
 - **Arrange** — drag to reorder, rotate, remove, undo.
 - **Create PDF** — A3, A4, A5, B4, B5, Letter, Legal, Tabloid or postcard paper (portrait/landscape chosen per image), or one page per image size, three quality levels.
+- **Update check** — tells you when a new version is out (once a day, can be turned off in Settings).
 - **Settings** — file name template (`{date}`, `{time}`, `{pages}`), save folder (Downloads by default), save without asking, open after saving.
 - Light / dark theme, Japanese / English UI, crisp on high-DPI and mixed-DPI monitors.
 
@@ -46,6 +47,7 @@ No .NET installation needed. Windows 10 (1809) or later, 64-bit.
 - **クリップボード履歴から取り込み** — Win+V の履歴にある画像を、コピーした順にまとめて追加。
 - **並べ替え** — ドラッグで並べ替え、回転、削除、元に戻す。
 - **PDF を作成** — A3・A4・A5・B4・B5・Letter・Legal・Tabloid・はがき（画像ごとに縦横を自動選択）、または画像サイズのページ。画質は 3 段階。
+- **更新の確認** — 新しいバージョンが出たら通知（1 日 1 回。設定でオフにできます）。
 - **設定** — ファイル名のテンプレート（`{date}` `{time}` `{pages}`）、保存先（既定はダウンロード）、確認せずに保存、保存後に開く。
 - ライト / ダーク、日本語 / 英語に対応。高 DPI や倍率の違うマルチモニターでもくっきり表示。
 

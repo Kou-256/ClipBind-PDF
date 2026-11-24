@@ -22,6 +22,11 @@ sealed class AppSettings
     /// <summary>既定の保存先 (null ならダウンロード)</summary>
     public string? SaveFolder { get; set; }
     public bool OpenAfterSave { get; set; }
+    /// <summary>起動時に新しいバージョンを確認する (1 日 1 回まで)</summary>
+    public bool CheckUpdates { get; set; } = true;
+    public DateTime? LastUpdateCheck { get; set; }
+    /// <summary>「このバージョンはスキップ」したバージョン</summary>
+    public string? SkippedVersion { get; set; }
 
     public AppSettings Clone() => (AppSettings)MemberwiseClone();
 

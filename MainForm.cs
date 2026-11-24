@@ -300,6 +300,33 @@ public sealed class MainForm : Form
         Invalidate(true);
     }
 
+    protected override async void OnShown(EventArgs e)
+    {
+        base.OnShown(e);
+        if (!settings.CheckUpdates) return;
+        if (settings.LastUpdateCheck is { } last && DateTime.Now - last < TimeSpan.FromHours(20)) return;
+        await Task.Delay(3000); // 起動直後の作業を邪魔しない
+        try
+        {
+            var info = await Updater.CheckAsync();
+            settings.LastUpdateCheck = DateTime.Now;
+            settings.Save();
+            if (info != null && settings.SkippedVersion != info.Version.ToString() && !IsDisposed)
+                ShowUpdateToast(info);
+        }
+        catch { /* オフラインなどは黙って次回に回す */ }
+    }
+
+    void ShowUpdateToast(UpdateInfo info)
+    {
+        string v = info.Version.ToString();
+        toast.Show(L.T($"新しいバージョン {v} があります（いまは {Updater.CurrentText}）。",
+                       $"Version {v} is available (you have {Updater.CurrentText})."), ToastKind.Info,
+            new ToastAction(L.T("ダウンロード", "Download"), () => Updater.Open(info.InstallerUrl ?? info.PageUrl)),
+            new ToastAction(L.T("変更点", "What's new"), () => Updater.Open(info.PageUrl)),
+            new ToastAction(L.T("スキップ", "Skip"), () => { settings.SkippedVersion = v; settings.Save(); }));
+    }
+
     void OpenSettings()
     {
         using var dlg = new SettingsForm(settings, DeviceDpi);
@@ -310,6 +337,8 @@ public sealed class MainForm : Form
         settings.AskSaveLocation = r.AskSaveLocation;
         settings.OpenAfterSave = r.OpenAfterSave;
         settings.ThemeMode = r.ThemeMode;
+        settings.CheckUpdates = r.CheckUpdates;
+        settings.LastUpdateCheck = r.LastUpdateCheck ?? settings.LastUpdateCheck;
         bool langChanged = settings.Language != r.Language;
         settings.Language = r.Language;
         settings.Save();

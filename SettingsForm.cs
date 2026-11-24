@@ -13,6 +13,11 @@ sealed class SettingsForm : Form
     readonly Segmented segTheme;
     readonly Segmented segLang;
     readonly ToolTip tip = Ui.ToolTip();
+    readonly ToggleSwitch tglUpdates;
+    readonly Button btnCheck;
+    readonly Label lblUpdate;
+    readonly Button lnkUpdate;
+    UpdateInfo? found;
 
     public AppSettings Result => draft;
 
@@ -138,6 +143,28 @@ sealed class SettingsForm : Form
         segLang.SelectedIndex = Math.Clamp(draft.Language, 0, 2);
         Row(L.T("言語", "Language"), segLang);
 
+        // ---------- 更新 ----------
+        Section(L.T("更新", "Updates"));
+        var updStack = Stack();
+        var updLine = Line();
+        updLine.Controls.Add(Ui.Label(L.T($"バージョン {Updater.CurrentText}", $"Version {Updater.CurrentText}"), Fg.Text, margin: new Padding(0, 5, 12, 0)));
+        btnCheck = Ui.Button(L.T("今すぐ確認", "Check now"), null, ButtonKind.Standard, async (_, _) => await CheckNowAsync());
+        btnCheck.Margin = new Padding(0);
+        updLine.Controls.Add(btnCheck);
+        lblUpdate = Ui.Label("", Fg.SubText, margin: new Padding(0, 6, 0, 0));
+        lnkUpdate = Ui.Button("", null, ButtonKind.Link, (_, _) => { if (found != null) Updater.Open(found.InstallerUrl ?? found.PageUrl); });
+        lnkUpdate.Visible = false;
+        tglUpdates = new ToggleSwitch
+        {
+            Text = L.T("起動時に新しいバージョンを確認する", "Check for a new version at startup"),
+            Checked = draft.CheckUpdates, Margin = new Padding(0, 8, 0, 0),
+        };
+        Theme.Style(tglUpdates, Bg.Surface);
+        tip.SetToolTip(tglUpdates, L.T("1 日 1 回、GitHub の公開リリースを確認します。送るのはアプリ名とバージョンだけです",
+            "Once a day, checks the public releases on GitHub. Only the app name and version are sent"));
+        updStack.Controls.AddRange([updLine, lblUpdate, lnkUpdate, tglUpdates]);
+        Row(L.T("バージョン", "Version"), updStack);
+
         // ---------- ボタン ----------
         var buttons = Line();
         buttons.Anchor = AnchorStyles.Right;
@@ -196,6 +223,35 @@ sealed class SettingsForm : Form
         if (dlg.ShowDialog(this) == DialogResult.OK) txtFolder.Text = dlg.SelectedPath;
     }
 
+    async Task CheckNowAsync()
+    {
+        btnCheck.Enabled = false;
+        lnkUpdate.Visible = false;
+        lblUpdate.Text = L.T("確認しています…", "Checking…");
+        try
+        {
+            found = await Updater.CheckAsync();
+            draft.LastUpdateCheck = DateTime.Now;
+            if (IsDisposed) return;
+            if (found == null)
+                lblUpdate.Text = L.T("最新のバージョンです。", "You have the latest version.");
+            else
+            {
+                lblUpdate.Text = L.T($"新しいバージョン {found.Version} があります。", $"Version {found.Version} is available.");
+                lnkUpdate.Text = L.T($"{found.Version} をダウンロード", $"Download {found.Version}");
+                lnkUpdate.Visible = true;
+            }
+        }
+        catch
+        {
+            if (!IsDisposed) lblUpdate.Text = L.T("確認できませんでした。インターネット接続を確認してください。", "Could not check. Check your internet connection.");
+        }
+        finally
+        {
+            if (!IsDisposed) btnCheck.Enabled = true;
+        }
+    }
+
     void Commit()
     {
         draft.FileNameTemplate = string.IsNullOrWhiteSpace(txtName.Text) ? AppSettings.DefaultFileNameTemplate : txtName.Text.Trim();
@@ -204,6 +260,7 @@ sealed class SettingsForm : Form
         draft.OpenAfterSave = tglOpen.Checked;
         draft.ThemeMode = segTheme.SelectedIndex;
         draft.Language = segLang.SelectedIndex;
+        draft.CheckUpdates = tglUpdates.Checked;
         DialogResult = DialogResult.OK;
         Close();
     }
