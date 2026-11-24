@@ -38,6 +38,8 @@ public sealed class MainForm : Form
     readonly EmptyState empty = new() { Dock = DockStyle.Fill };
     readonly ToggleSwitch chkWatch = new() { Text = L.T("コピーした画像を自動で追加", "Auto-add copied images") };
     readonly Segmented segPage;
+    readonly ThemedMenu paperMenu = new();
+    int paperIndex;
     readonly Segmented segQuality;
     readonly Label lblCount = Ui.Label(L.T("0 枚", "0 images"), pt: BaseFontPt, fs: FontStyle.Bold, margin: new Padding(4, 0, 6, 0));
     readonly Label lblSelection = Ui.Label("", Fg.SubText, margin: new Padding(0, 0, 16, 0));
@@ -159,8 +161,12 @@ public sealed class MainForm : Form
         for (int i = 0; i < 7; i++)
             footer.ColumnStyles.Add(i == 4 ? new ColumnStyle(SizeType.Percent, 100) : new ColumnStyle(SizeType.AutoSize));
         segPage = new Segmented(tip,
-            ("A4", L.T("A4 用紙。画像の向きに合わせて縦/横を自動で選び、余白 10mm で中央に配置します", "A4 paper. Portrait or landscape is chosen per image, centered with 10 mm margins")),
+            ("A4 ▾", L.T("用紙サイズ (クリックで A3・B4・Letter などに変更)。画像の向きに合わせて縦/横を自動で選び、余白 10mm で中央に配置します", "Paper size (click to choose A3, B4, Letter…). Portrait or landscape is chosen per image, centered with 10 mm margins")),
             (L.T("画像サイズ", "Image size"), L.T("ページの大きさを画像そのものの大きさに合わせます (余白なし)", "Each page is exactly the size of its image (no margins)")));
+        paperIndex = Math.Clamp(settings.PaperIndex, 0, Paper.All.Length - 1);
+        BuildPaperMenu();
+        segPage.Buttons[0].Click += (_, _) => paperMenu.Show(segPage.Buttons[0], new Point(0, segPage.Buttons[0].Height));
+        segPage.Buttons[0].KeyDown += (_, e) => { if (e.KeyCode is Keys.Down or Keys.F4 || (e.Alt && e.KeyCode == Keys.Down)) { paperMenu.Show(segPage.Buttons[0], new Point(0, segPage.Buttons[0].Height)); e.Handled = true; } };
         segQuality = new Segmented(tip,
             (L.T("高画質", "High"), L.T("JPEG 品質 95。ファイルサイズは大きめ", "JPEG quality 95. Larger files")),
             (L.T("標準", "Standard"), L.T("JPEG 品質 85。おすすめ", "JPEG quality 85. Recommended")),
@@ -228,6 +234,30 @@ public sealed class MainForm : Form
     // ================= テーマ / DPI =================
 
     /// <summary>配色・フォント・アイコン・サムネイルを、現在のテーマと DPI で適用し直す</summary>
+    void BuildPaperMenu()
+    {
+        paperMenu.Items.Clear();
+        for (int i = 0; i < Paper.All.Length; i++)
+        {
+            int idx = i;
+            var p = Paper.All[i];
+            var item = new ToolStripMenuItem($"{p.Label}\t{p.Detail}") { Checked = i == paperIndex };
+            item.Click += (_, _) => SetPaper(idx);
+            paperMenu.Items.Add(item);
+        }
+        segPage.Buttons[0].Text = Paper.All[paperIndex].Label + " ▾";
+    }
+
+    void SetPaper(int idx)
+    {
+        paperIndex = idx;
+        settings.PaperIndex = idx;
+        segPage.SelectedIndex = 0;
+        for (int i = 0; i < paperMenu.Items.Count; i++)
+            ((ToolStripMenuItem)paperMenu.Items[i]).Checked = i == idx;
+        segPage.Buttons[0].Text = Paper.All[idx].Label + " ▾";
+    }
+
     void ApplyTheme()
     {
         if (IsDisposed) return;
@@ -245,6 +275,10 @@ public sealed class MainForm : Form
         // ボタンの高さを揃える (ヘッダー / フッター)
         Ui.EqualizeHeights([btnHistory, btnPaste, btnFile]);
         Ui.EqualizeHeights(segPage.Buttons.Concat(segQuality.Buttons).Append<Control>(btnPdf));
+        paperMenu.ApplyTheme(dpi);
+        // 用紙名が変わってもボタン幅が変わらないよう、いちばん長い名前に合わせる
+        var pb = segPage.Buttons[0];
+        pb.MinimumSize = new Size(Paper.All.Max(p => TextRenderer.MeasureText(p.Label + " ▾", pb.Font).Width) + pb.Padding.Horizontal + 4, pb.MinimumSize.Height);
 
         int px = ThumbPx;
         if (thumbs.ImageSize.Width != px)
@@ -754,14 +788,14 @@ public sealed class MainForm : Form
         }
 
         var images = Entries().Select(x => x.Image).ToList();
-        var mode = segPage.SelectedIndex == 1 ? PageMode.FitToImage : PageMode.A4Auto;
+        Paper? paper = segPage.SelectedIndex == 1 ? null : Paper.All[paperIndex];
         long quality = QualityValues[Math.Clamp(segQuality.SelectedIndex, 0, 2)];
         string oldText = btnPdf.Text;
         try
         {
             SetBusy(true);
             btnPdf.Text = L.T("作成中…", "Creating…");
-            await Task.Run(() => PdfWriter.Write(path, images, mode, quality));
+            await Task.Run(() => PdfWriter.Write(path, images, paper, quality));
             long size = new FileInfo(path).Length;
             if (settings.OpenAfterSave)
                 Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });

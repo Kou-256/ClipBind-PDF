@@ -7,7 +7,8 @@ sealed class AppSettings
 {
     public const string DefaultFileNameTemplate = "ClipBind_{date}_{time}";
 
-    public int PageMode { get; set; }          // 0 = A4, 1 = 画像サイズ
+    public int PageMode { get; set; }          // 0 = 用紙, 1 = 画像サイズ
+    public int PaperIndex { get; set; } = Paper.DefaultIndex; // Paper.All のインデックス
     public int QualityIndex { get; set; } = 1; // 0 = 高画質, 1 = 標準, 2 = 軽量
     public bool AutoAdd { get; set; } = true;
     public int ThemeMode { get; set; }         // 0 = Windows に合わせる, 1 = ライト, 2 = ダーク

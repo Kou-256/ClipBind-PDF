@@ -1,4 +1,6 @@
-# ClipBind PDF
+<p align="center"><img src="site/assets/icon-128.png" width="96" height="96" alt="ClipBind PDF icon"></p>
+
+<h1 align="center">ClipBind PDF</h1>
 
 **Combine clipboard images into one PDF — for Windows.**
 クリップボードの画像をまとめて 1 つの PDF にする Windows アプリ。
@@ -23,7 +25,7 @@ No .NET installation needed. Windows 10 (1809) or later, 64-bit.
 - **Auto-add** — every image you copy (screenshots, images from a browser…) is added to the list automatically.
 - **Import clipboard history** — load all images in your Win+V history at once, in the order you copied them.
 - **Arrange** — drag to reorder, rotate, remove, undo.
-- **Create PDF** — A4 (portrait/landscape chosen per image) or one page per image size, three quality levels.
+- **Create PDF** — A3, A4, A5, B4, B5, Letter, Legal, Tabloid or postcard paper (portrait/landscape chosen per image), or one page per image size, three quality levels.
 - **Settings** — file name template (`{date}`, `{time}`, `{pages}`), save folder (Downloads by default), save without asking, open after saving.
 - Light / dark theme, Japanese / English UI, crisp on high-DPI and mixed-DPI monitors.
 
@@ -43,7 +45,7 @@ No .NET installation needed. Windows 10 (1809) or later, 64-bit.
 - **自動追加** — 画像をコピーするたびに一覧へ追加（スクリーンショット、ブラウザーの画像など）。
 - **クリップボード履歴から取り込み** — Win+V の履歴にある画像を、コピーした順にまとめて追加。
 - **並べ替え** — ドラッグで並べ替え、回転、削除、元に戻す。
-- **PDF を作成** — A4（画像ごとに縦横を自動選択）または画像サイズのページ。画質は 3 段階。
+- **PDF を作成** — A3・A4・A5・B4・B5・Letter・Legal・Tabloid・はがき（画像ごとに縦横を自動選択）、または画像サイズのページ。画質は 3 段階。
 - **設定** — ファイル名のテンプレート（`{date}` `{time}` `{pages}`）、保存先（既定はダウンロード）、確認せずに保存、保存後に開く。
 - ライト / ダーク、日本語 / 英語に対応。高 DPI や倍率の違うマルチモニターでもくっきり表示。
 

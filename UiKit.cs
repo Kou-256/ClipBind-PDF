@@ -485,6 +485,61 @@ sealed class Segmented : FlowLayoutPanel
     }
 }
 
+/// <summary>ライト/ダークに合わせたドロップダウン メニュー</summary>
+sealed class ThemedMenu : ContextMenuStrip
+{
+    sealed class Colors : ProfessionalColorTable
+    {
+        public override Color ToolStripDropDownBackground => Theme.Surface;
+        public override Color ImageMarginGradientBegin => Theme.Surface;
+        public override Color ImageMarginGradientMiddle => Theme.Surface;
+        public override Color ImageMarginGradientEnd => Theme.Surface;
+        public override Color MenuBorder => Theme.Border;
+        public override Color MenuItemBorder => Theme.Hover;
+        public override Color MenuItemSelected => Theme.Hover;
+        public override Color CheckBackground => Theme.AccentLight;
+        public override Color CheckSelectedBackground => Theme.AccentLight;
+        public override Color CheckPressedBackground => Theme.AccentLight;
+        public override Color SeparatorDark => Theme.Border;
+        public override Color SeparatorLight => Theme.Surface;
+    }
+
+    sealed class MenuRenderer : ToolStripProfessionalRenderer
+    {
+        public MenuRenderer() : base(new Colors()) { RoundedEdges = false; }
+        protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
+        {
+            e.TextColor = e.Item.Tag as string == "sub" ? Theme.SubText : Theme.Text;
+            base.OnRenderItemText(e);
+        }
+        protected override void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
+        {
+            var g = e.Graphics;
+            var r = e.ImageRectangle;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            using var p = new Pen(Theme.AccentText, Math.Max(1.5f, r.Height / 8f));
+            g.DrawLines(p, [new PointF(r.Left + r.Width * .2f, r.Top + r.Height * .55f),
+                            new PointF(r.Left + r.Width * .42f, r.Top + r.Height * .75f),
+                            new PointF(r.Left + r.Width * .8f, r.Top + r.Height * .3f)]);
+        }
+    }
+
+    public ThemedMenu()
+    {
+        Renderer = new MenuRenderer();
+        ShowImageMargin = true;
+        ShowCheckMargin = false;
+    }
+
+    public void ApplyTheme(int dpi)
+    {
+        Font = Theme.Font(10f, FontStyle.Regular, dpi);
+        BackColor = Theme.Surface;
+        ForeColor = Theme.Text;
+        Renderer = new MenuRenderer();
+    }
+}
+
 /// <summary>一覧が空のときに表示する案内</summary>
 sealed class EmptyState : Panel
 {

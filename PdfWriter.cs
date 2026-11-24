@@ -6,12 +6,27 @@ using System.Text;
 
 namespace ClipboardPDF;
 
-public enum PageMode
+/// <summary>用紙サイズ (縦置きの幅・高さ, pt)</summary>
+public sealed record Paper(string Name, string Detail, double W, double H)
 {
-    /// <summary>ページサイズ = 画像サイズ</summary>
-    FitToImage,
-    /// <summary>A4 縦/横を画像の向きに合わせて自動選択し、余白付きで中央配置</summary>
-    A4Auto,
+    static double Mm(double mm) => mm * 72.0 / 25.4;
+
+    public static readonly Paper[] All =
+    [
+        new("A3", "297 × 420 mm", Mm(297), Mm(420)),
+        new("A4", "210 × 297 mm", Mm(210), Mm(297)),
+        new("A5", "148 × 210 mm", Mm(148), Mm(210)),
+        new("B4", "257 × 364 mm (JIS)", Mm(257), Mm(364)),
+        new("B5", "182 × 257 mm (JIS)", Mm(182), Mm(257)),
+        new("Letter", "8.5 × 11 in", 612, 792),
+        new("Legal", "8.5 × 14 in", 612, 1008),
+        new("Tabloid", "11 × 17 in", 792, 1224),
+        new("はがき|Postcard", "100 × 148 mm", Mm(100), Mm(148)),
+    ];
+
+    public const int DefaultIndex = 1; // A4
+
+    public string Label => Name.Contains('|') ? L.T(Name.Split('|')[0], Name.Split('|')[1]) : Name;
 }
 
 /// <summary>
@@ -19,9 +34,10 @@ public enum PageMode
 /// </summary>
 public static class PdfWriter
 {
-    const double A4W = 595.28, A4H = 841.89, Margin = 28.35; // 10mm
+    const double Margin = 28.35; // 10mm
 
-    public static void Write(string path, IReadOnlyList<Image> images, PageMode mode, long jpegQuality)
+    /// <param name="paper">null なら各ページ = 画像サイズ。指定時は画像の向きに合わせて縦/横を選び、余白付きで中央配置</param>
+    public static void Write(string path, IReadOnlyList<Image> images, Paper? paper, long jpegQuality)
     {
         if (images.Count == 0) throw new ArgumentException(L.T("画像がありません。", "No images."));
 
@@ -53,16 +69,17 @@ public static class PdfWriter
             // 画像の物理サイズ(pt): 96dpi 換算
             double iw = pw * 72.0 / 96.0, ih = ph * 72.0 / 96.0;
             double pageW, pageH, drawW, drawH, x, y;
-            if (mode == PageMode.FitToImage)
+            if (paper is null)
             {
                 pageW = drawW = iw; pageH = drawH = ih; x = y = 0;
             }
             else
             {
                 bool landscape = pw > ph;
-                pageW = landscape ? A4H : A4W;
-                pageH = landscape ? A4W : A4H;
-                double maxW = pageW - Margin * 2, maxH = pageH - Margin * 2;
+                pageW = landscape ? paper.H : paper.W;
+                pageH = landscape ? paper.W : paper.H;
+                double m = Math.Min(Margin, Math.Min(pageW, pageH) * 0.05);
+                double maxW = pageW - m * 2, maxH = pageH - m * 2;
                 double scale = Math.Min(maxW / iw, maxH / ih);
                 drawW = iw * scale; drawH = ih * scale;
                 x = (pageW - drawW) / 2; y = (pageH - drawH) / 2;

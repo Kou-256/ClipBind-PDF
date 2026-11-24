@@ -292,7 +292,7 @@
     </div>
     <div class="meta num">
       <span id="now">2026/11/24 12:00</span>
-      <span>v1.0.0</span>
+      <span>v1.1.0</span>
     </div>
   </div>
 
@@ -353,7 +353,7 @@
 
   <!-- ===== ダウンロード ===== -->
   <div class="ln" style="--i:10">
-    <a class="buy" href="https://github.com/Kou-256/ClipBind-PDF/releases/download/v1.0.0/ClipBindPDF-Setup-1.0.0.exe">
+    <a class="buy" href="https://github.com/Kou-256/ClipBind-PDF/releases/download/v1.1.0/ClipBindPDF-Setup-1.1.0.exe">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M4 19h16"/></svg>
       <span lang="ja">無料でダウンロード</span><span lang="en">Download for free</span>
     </a>
@@ -411,7 +411,6 @@
         <img lang="ja" src="/assets/app-ja.png" width="2120" height="1400" loading="lazy" alt="ClipBind PDF の画面。4 枚の画像が並び、右下に［PDF を作成］ボタン">
         <img lang="en" src="/assets/app-en.png" width="2120" height="1400" loading="lazy" alt="The ClipBind PDF window with four images in the list and the Create PDF button at the bottom right">
       </button>
-      <figcaption><span lang="ja">感熱紙なので白黒で印字されています。触れるとカラーで表示。画像は表示例です。</span><span lang="en">Printed in thermal grey — hover or tap to see it in colour. Sample images.</span></figcaption>
     </figure>
   </section>
 
@@ -424,7 +423,7 @@
       <li class="ln"><div class="lead"><span><span lang="ja">コピーした画像を自動で追加</span><span lang="en">Auto-add copied images</span></span><span class="fill"></span><span class="p num">¥0</span></div></li>
       <li class="ln"><div class="lead"><span><span lang="ja">クリップボード履歴から取り込み</span><span lang="en">Import clipboard history</span></span><span class="fill"></span><span class="p num">¥0</span></div><small><span lang="ja">同じ画像は重複して追加しません</span><span lang="en">Duplicates are skipped</span></small></li>
       <li class="ln"><div class="lead"><span><span lang="ja">並べ替え・回転・元に戻す</span><span lang="en">Reorder, rotate, undo</span></span><span class="fill"></span><span class="p num">¥0</span></div></li>
-      <li class="ln"><div class="lead"><span><span lang="ja">A4 / 画像サイズのページ</span><span lang="en">A4 or image-size pages</span></span><span class="fill"></span><span class="p num">¥0</span></div><small><span lang="ja">A4 は画像ごとに縦横を自動で選び、余白 10 mm</span><span lang="en">A4 picks portrait or landscape per image, 10 mm margins</span></small></li>
+      <li class="ln"><div class="lead"><span><span lang="ja">A3・A4・B4・B5・Letter など / 画像サイズ</span><span lang="en">A3, A4, B4, B5, Letter… or image size</span></span><span class="fill"></span><span class="p num">¥0</span></div><small><span lang="ja">用紙は画像ごとに縦横を自動で選び、余白 10 mm</span><span lang="en">Portrait or landscape is picked per image, 10 mm margins</span></small></li>
       <li class="ln"><div class="lead"><span><span lang="ja">画質 3 段階</span><span lang="en">Three quality levels</span></span><span class="fill"></span><span class="p num">¥0</span></div><small><span lang="ja">高画質・標準・軽量 (メール添付向け)</span><span lang="en">High, Standard, Small (for email)</span></small></li>
       <li class="ln"><div class="lead"><span><span lang="ja">ファイル名の自動命名</span><span lang="en">Automatic file names</span></span><span class="fill"></span><span class="p num">¥0</span></div><small><span lang="ja">{date}・{time}・{pages} を使ったテンプレート。確認なしですぐ保存も可</span><span lang="en">Templates with {date}, {time}, {pages}; optional save-without-asking</span></small></li>
       <li class="ln"><div class="lead"><span><span lang="ja">ライト / ダーク・日本語 / English</span><span lang="en">Light / dark · Japanese / English</span></span><span class="fill"></span><span class="p num">¥0</span></div></li>
@@ -464,7 +463,7 @@
   <footer class="foot">
     <a class="barcode ln" href="https://github.com/Kou-256/ClipBind-PDF" aria-label="GitHub: Kou-256/ClipBind-PDF">
       <svg id="bars" viewBox="0 0 200 58" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <span class="code">CLIPBIND-PDF-1.0.0</span>
+      <span class="code">CLIPBIND-PDF-1.1.0</span>
     </a>
     <p class="thanks ln"><span lang="ja">またのご利用をお待ちしております</span><span lang="en">Thank you. Come again.</span></p>
     <p class="small ln">
@@ -527,7 +526,7 @@
 
     // バーコード: 文字列から決まった太さの縞を描く
     var svg = document.getElementById('bars');
-    var s = 'CLIPBIND-PDF-1.0.0', x = 6, out = '';
+    var s = 'CLIPBIND-PDF-1.1.0', x = 6, out = '';
     for (var i = 0; i < s.length && x < 194; i++) {
       var c = s.charCodeAt(i);
       for (var k = 0; k < 3 && x < 194; k++) {
