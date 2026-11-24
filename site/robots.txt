@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://clipbind-pdf.vercel.app/sitemap.xml
