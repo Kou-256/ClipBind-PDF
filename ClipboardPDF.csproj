@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <AssemblyName>ClipBind PDF</AssemblyName>
+    <Product>ClipBind PDF</Product>
+    <Version>1.0.0</Version>
+    <Description>Combine clipboard images into one PDF</Description>
+    <ApplicationIcon>ClipBind.ico</ApplicationIcon>
+    <RootNamespace>ClipboardPDF</RootNamespace>
+    <!-- コードだけで UI を組んでおりデザイナーを使わないため、デザイナー用シリアル化の警告は不要 -->
+    <NoWarn>$(NoWarn);WFO1000</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ClipBind.ico" LogicalName="ClipBind.ico" />
+  </ItemGroup>
+
+</Project>
